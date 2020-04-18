@@ -97,9 +97,9 @@ def gen_bar(x, y, i):
 def main():
     df1, date = gen_data('全球疫情历史数据.csv')
     tl = Timeline()
-    tl.add_schema(is_auto_play=False,
+    tl.add_schema(is_auto_play=True,
                   play_interval=500,
-                  is_loop_play=False)
+                  is_loop_play=True)
 
     k = 0
     for i in date:
