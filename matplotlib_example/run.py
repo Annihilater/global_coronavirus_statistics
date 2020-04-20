@@ -9,7 +9,6 @@
 import random
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
 import matplotlib.animation as animation
 # from IPython.display import HTML
 import matplotlib
@@ -24,11 +23,11 @@ plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
 # 导入random函数，randomcolor用于生成颜色代码
 # randomcolor生成颜色代码原理，
 # 【1-9/A-F】15个数字随机组合成6位字符串前面再加上一个“#”号键
-def randomcolor():
-    colorlist = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
+def random_color():
+    cl = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
     color = ''
     for i in range(6):
-        color += random.choice(colorlist)
+        color += random.choice(cl)
     return '#' + color
 
 
@@ -42,7 +41,7 @@ df4 = df3.sort_values(by='confirmed', ascending=True).tail(10)
 country_list = set(df1['country'])
 color_list = []
 for i in range(len(country_list)):
-    color_list.append(randomcolor())
+    color_list.append(random_color())
 
 colors = dict(zip(country_list, color_list))
 
@@ -57,7 +56,7 @@ def gen_data(current_date):
 fig, ax = plt.subplots(figsize=(15, 8))
 
 
-def draw_barchart(current_date):
+def draw_bar_chart(current_date):
     df5 = gen_data(current_date)
     ax.clear()
     ax.barh(df5['country'], df5['confirmed'], color=[colors[x] for x in df5['country']])
@@ -75,7 +74,7 @@ def draw_barchart(current_date):
     plt.box(False)
 
 
-draw_barchart(current_date)
+draw_bar_chart(current_date)
 
 date_list = list(set(df1['date']))
 date_list.sort()
@@ -83,7 +82,7 @@ date_list.sort()
 
 # 将原来的静态图拼接成动画
 fig, ax = plt.subplots(figsize=(15, 8))
-animator = animation.FuncAnimation(fig, draw_barchart, frames=date_list[-20:])  # 保存到jshtml
+animator = animation.FuncAnimation(fig, draw_bar_chart, frames=date_list[-20:])  # 保存到jshtml
 HTML(animator.to_jshtml())
 
 # 生成video，并保存至指定文件夹中
