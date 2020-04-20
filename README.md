@@ -6,7 +6,7 @@
 
 
 
-
+![matplotlib 实现动态排序区分颜色](https://raw.githubusercontent.com/Annihilater/global_coronavirus_statistics/master/picture/matplotlib实现动态排序区分颜色.gif)
 
 
 
