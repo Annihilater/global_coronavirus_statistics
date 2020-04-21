@@ -73,7 +73,7 @@ def draw_bar(df, date_list, tl):
 
 
 def main():
-    df = pd.read_csv('../全球疫情历史数据.csv', usecols=['date', 'country', 'confirmed'])
+    df = pd.read_csv('../source_data.csv', usecols=['date', 'country', 'confirmed'])
 
     # 获取顺序的日期列表
     date_list = list(set(df['date'].to_list()))

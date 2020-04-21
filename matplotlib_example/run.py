@@ -68,7 +68,7 @@ def draw_bar_chart(current_date):
     plt.box(False)
 
 
-df = pd.read_csv('../全球疫情历史数据.csv', usecols=['date', 'country', 'confirmed'])
+df = pd.read_csv('../source_data.csv', usecols=['date', 'country', 'confirmed'])
 
 # 生成字典: {国家: 颜色}
 country_list = set(df['country'])
