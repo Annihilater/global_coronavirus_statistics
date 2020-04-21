@@ -20,10 +20,12 @@ matplotlib.rcParams['animation.embed_limit'] = 2 ** 128
 plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
 
 
-# 导入random函数，randomcolor用于生成颜色代码
-# randomcolor生成颜色代码原理，
-# 【1-9/A-F】15个数字随机组合成6位字符串前面再加上一个“#”号键
 def random_color():
+    """
+    导入random函数，random_color用于生成颜色代码
+    random_color生成颜色代码原理，
+    【1-9/A-F】15个数字随机组合成6位字符串前面再加上一个“#”号键
+    """
     cl = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
     color = ''
     for i in range(6):
@@ -31,41 +33,33 @@ def random_color():
     return '#' + color
 
 
-df1 = pd.read_csv('../全球疫情历史数据.csv', usecols=['date', 'country', 'confirmed'])
-current_date = '2020-04-05'
-df2 = df1[df1['date'].eq(current_date)]
-df3 = df2.groupby(by=['country']).head(1)
-df4 = df3.sort_values(by='confirmed', ascending=True).tail(10)
-
-# 生成字典: {国家: 颜色}
-country_list = set(df1['country'])
-color_list = []
-for i in range(len(country_list)):
-    color_list.append(random_color())
-
-colors = dict(zip(country_list, color_list))
-
-
 def gen_data(current_date):
-    df2 = df1[df1['date'].eq(current_date)]
+    """
+    裁剪数据
+    """
+    df2 = df[df['date'].eq(current_date)]
     df3 = df2.groupby(by=['country']).head(1)
     df4 = df3.sort_values(by='confirmed', ascending=True).tail(10)
     return df4
 
 
-fig, ax = plt.subplots(figsize=(15, 8))
-
-
 def draw_bar_chart(current_date):
+    """
+    画横向柱状图
+    """
+    title = '全球各国新型冠状病例确诊数增长变化'
+    author = 'by@Annihilater'
     df5 = gen_data(current_date)
+
+    # 清除坐标标签
     ax.clear()
     ax.barh(df5['country'], df5['confirmed'], color=[colors[x] for x in df5['country']])
     for i, (name, value) in enumerate(zip(df5['country'], df5['confirmed'])):
         ax.text(value, i, f'{value:,.0f}', size=14, ha='left', va='center')
     # 设置标题
-    ax.text(0, 1.05, '全球各国新型冠状病例确诊数增长变化', transform=ax.transAxes, size=30, weight=600, ha='left', va='top')
+    ax.text(0, 1.05, title, transform=ax.transAxes, size=30, weight=600, ha='left', va='top')
     # 设置作者
-    ax.text(1, 0.1, 'by@Annihilater', transform=ax.transAxes, color='#777777', size=18, ha='right',
+    ax.text(1, 0.1, author, transform=ax.transAxes, color='#777777', size=18, ha='right',
             bbox=dict(facecolor='white', alpha=0.8, edgecolor='white'))
     # 画布右中添加年份
     ax.text(1, 0.4, current_date, transform=ax.transAxes, color='#777777', size=46, ha='right', weight=800)
@@ -74,11 +68,18 @@ def draw_bar_chart(current_date):
     plt.box(False)
 
 
-draw_bar_chart(current_date)
+df = pd.read_csv('../全球疫情历史数据.csv', usecols=['date', 'country', 'confirmed'])
 
-date_list = list(set(df1['date']))
+# 生成字典: {国家: 颜色}
+country_list = set(df['country'])
+color_list = []
+for i in range(len(country_list)):
+    color_list.append(random_color())
+colors = dict(zip(country_list, color_list))
+
+# 生成日期时序
+date_list = list(set(df['date']))
 date_list.sort()
-# date_list
 
 # 将原来的静态图拼接成动画
 fig, ax = plt.subplots(figsize=(15, 8))
